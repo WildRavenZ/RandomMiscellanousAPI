@@ -1,8 +1,8 @@
 ### DOCUMENTACIÓN ###
 # Nombre: RandomMiscellaneousAPI.py
 # Autor: Fernando Franco Zago
-# Fecha: 05/05/2025
-# Versión: 0.1.3
+# Fecha: 06/05/2025
+# Versión: 1.0.0
 # Descripción: RandomMiscellaneousAPI es una API desarrollada con Flask que
 #    permite generar diversos datos aleatorios útiles para pruebas, simulaciones,
 #    juegos, educación o desarrollo de software. Entre sus funcionalidades se
@@ -33,7 +33,7 @@ swagger_config = {
     "info": {
         "title": "RandomMiscellaneousAPI",
         "description": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
-        "version": "0.1.3",
+        "version": "1.0.0",
         "contact": {
             "name": "Fernando Franco Zago"
         }
@@ -53,8 +53,8 @@ def home():
     documentacion = {
         "nombre": "RandomMiscellaneousAPI.py",
         "autor": "Fernando Franco Zago",
-        "fecha": "05/05/2025",
-        "version": "0.1.3",
+        "fecha": "06/05/2025",
+        "version": "1.0.0",
         "descripcion": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
         "requisitos": ["pip install Flask", "pip install flasgger"],
         "librerias": {
