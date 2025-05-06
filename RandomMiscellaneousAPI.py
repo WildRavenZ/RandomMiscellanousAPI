@@ -38,7 +38,7 @@ swagger_config = {
             "name": "Fernando Franco Zago"
         }
     },
-    "host": "localhost:5000",  # O cámbialo por tu dominio en producción
+    "host": "https://randommiscellanousapi.onrender.com",
     "basePath": "/"
 }
 
@@ -1086,4 +1086,4 @@ def ColorAleatorio():
 
 # Ejecutar servidor
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
