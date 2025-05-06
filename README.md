@@ -47,4 +47,4 @@ Este proyecto está bajo la licencia [MIT](LICENSE).
 Actualmente, esta es la primer versión de la API. Cualquier contribución es bienvenida.
 
 ## 🙋‍♂️ Autores y contribuidores
-- Fernando Franco Zago (Autor) [Github](https://github.com/WildRavenZ) y [LinkedIn](www.linkedin.com/in/fernando-franco-zago-066840313).
+- Fernando Franco Zago (Autor) [Github](https://github.com/WildRavenZ) y [LinkedIn](www.linkedin.com/in/fernando-franco-zago-066840313/).
