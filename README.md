@@ -4,6 +4,7 @@
 ![Flask](https://img.shields.io/badge/Flask-3.1.0-lightgrey?logo=flask)
 ![Flasgger](https://img.shields.io/badge/Flasgger-0.9.7.1-blueviolet?logo=swagger&logoColor=white)
 ![Deploy](https://img.shields.io/badge/Render-Live-brightgreen)
+
 RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.
 
 ---
