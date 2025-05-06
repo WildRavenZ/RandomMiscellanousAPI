@@ -41,7 +41,7 @@ Siendo la URL base: https://randommiscellanousapi.onrender.com/:
 Para información más detallada sobre el funcionamiento de los endpoints, consulta la [documentación en línea](https://randommiscellanousapi.onrender.com/apidocs/#/).
 
 ## ⚖ Licencia
-Este proyecto está bajo la licencia [MIT](LICENCE).
+Este proyecto está bajo la licencia [MIT](LICENSE).
 
 ## 📈 Estado del proyecto
 Actualmente, esta es la primer versión de la API. Cualquier contribución es bienvenida.
