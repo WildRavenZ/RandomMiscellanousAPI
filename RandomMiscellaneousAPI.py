@@ -38,7 +38,7 @@ swagger_config = {
             "name": "Fernando Franco Zago"
         }
     },
-    "host": "https://randommiscellanousapi.onrender.com",
+    "host": "randommiscellanousapi.onrender.com",
     "basePath": "/"
 }
 
