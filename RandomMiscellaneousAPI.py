@@ -260,7 +260,7 @@ def BarajaAleatoria():
           application/json: {"code":1002,"error":true,
           "message":"No hay suficientes cartas en la baraja para repartir sin repetir.","status":400}
     """
-    cartas_por_mano = request.args.get('cartas', 1, type=int)
+    cartas_por_mano = request.args.get('cartas_por_mano', 1, type=int)
     manos = request.args.get('manos', 1, type=int)
 
     if cartas_por_mano <= 0 or manos <= 0:
