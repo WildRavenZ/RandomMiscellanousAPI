@@ -1,4 +1,4 @@
-# 🧪 RandomMiscellaneousAPI [1.0.0]
+# 🧪 RandomMiscellaneousAPI [1.0.2]
 
 ![Python](https://img.shields.io/badge/Python-3.11.9-blue?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.1.0-lightgrey?logo=flask)
