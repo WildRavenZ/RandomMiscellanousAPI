@@ -79,7 +79,7 @@ def home():
 #   - cantidad: Cantidad de números aleatorios a generar (por defecto 1).
 # Respuesta: JSON con los números aleatorios generados.
 ###########
-@app.route('/api/NumAleatorio', methods=['POST'])
+@app.route('/api/NumAleatorio', methods=['GET'])
 def NumAleatorio():
     """
     Genera números aleatorios entre un límite inferior y superior.
