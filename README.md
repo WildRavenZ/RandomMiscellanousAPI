@@ -2,6 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11.9-blue?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.1.0-lightgrey?logo=flask)
+![Flask](https://img.shields.io/badge/FlaskCORS-5.0.1-lightgrey?logo=flask)
 ![Flasgger](https://img.shields.io/badge/Flasgger-0.9.7.1-blueviolet?logo=swagger&logoColor=white)
 ![Deploy](https://img.shields.io/badge/Render-Live-brightgreen)
 
@@ -17,6 +18,7 @@ RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar div
 
 - 🐍 Python 3.11.9 (Lógica para las APIs)
 - 🌐 Flask 3.1.0 (Framework)
+- ⚙ Flask-cors 5.0.1 (CORS)
 - 📃 Flasgger 0.9.7.1 (Documentación)
 - ☁️ Render.com (Hosting gratuito)
 
@@ -44,7 +46,13 @@ Para información más detallada sobre el funcionamiento de los endpoints, consu
 Este proyecto está bajo la licencia [MIT](LICENSE).
 
 ## 📈 Estado del proyecto
-Actualmente, esta es la primer versión de la API. Cualquier contribución es bienvenida.
+### 1.0.2 (Versión actual):
+- Se agregó flask-cors para un consumo de API más permisivo en sitios web https.
+- Se cambió la documentación.
+### 1.0.1:
+- Se arreglaron errores relacionados al consumo de la API de BarajaAleatoria.
+### 1.0.0:
+- API creada y hosteada en línea.
 
 ## 🙋‍♂️ Autores y contribuidores
 - Fernando Franco Zago (Autor) [Github](https://github.com/WildRavenZ) y [LinkedIn](https://www.linkedin.com/in/fernando-franco-zago-066840313/).
