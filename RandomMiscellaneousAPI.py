@@ -2,7 +2,7 @@
 # Nombre: RandomMiscellaneousAPI.py
 # Autor: Fernando Franco Zago
 # Fecha: 09/06/2025
-# Versión: 1.0.3
+# Versión: 1.1.0
 # Descripción: RandomMiscellaneousAPI es una API desarrollada con Flask que
 #    permite generar diversos datos aleatorios útiles para pruebas, simulaciones,
 #    juegos, educación o desarrollo de software. Entre sus funcionalidades se
@@ -35,7 +35,7 @@ swagger_config = {
     "info": {
         "title": "RandomMiscellaneousAPI",
         "description": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
-        "version": "1.0.3",
+        "version": "1.1.0",
         "contact": {
             "name": "Fernando Franco Zago"
         }
@@ -56,7 +56,7 @@ def home():
         "nombre": "RandomMiscellaneousAPI.py",
         "autor": "Fernando Franco Zago",
         "fecha": "09/06/2025",
-        "version": "1.0.3",
+        "version": "1.1.0",
         "descripcion": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
         "requisitos": ["pip install Flask", "pip install flask-cors", "pip install flasgger"],
         "librerias": {
@@ -131,6 +131,14 @@ def NumAleatorio():
             'code': 1001
         }), 400
 
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'El límite de la cantidad debe ser menor a 100.',
+            'code': 1000
+        }), 400
+
     numeros = [randint(lim_inferior, lim_superior) for _ in range(cantidad)]
 
     return jsonify({
@@ -203,11 +211,11 @@ def NumDecimalAleatorio():
             'code': 1003
         }), 400
 
-    if decimales < 0:
+    if decimales < 0 or decimales > 10:
         return jsonify({
             'status': 400,
             'error': True,
-            'message': 'Los decimales deben ser mayores a cero.',
+            'message': 'El rango de decimales debe ser entre 0 y 10.',
             'code': 1002
         }), 400
 
@@ -217,6 +225,14 @@ def NumDecimalAleatorio():
             'error': True,
             'message': 'La cantidad debe ser mayor a cero.',
             'code': 1001
+        }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'El límite de la cantidad debe ser menor a 100.',
+            'code': 1000
         }), 400
 
     numeros = [f"{uniform(lim_inferior, lim_superior):.{decimales}f}" for _ in range(cantidad)]
@@ -351,6 +367,14 @@ def LanzamientoMoneda():
             'message': 'La cantidad de lanzamientos debe ser mayor a 0.',
             'code': 1001
             }), 400
+    
+    if lanzamientos > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de lanzamientos debe ser menor a 100.',
+            'code': 1000
+            }), 400
 
     lanzamientos_dict = {}
     for i in range(1, lanzamientos + 1):
@@ -414,12 +438,28 @@ def LanzamientoDado():
             'code': 1001
             }), 400
     
+    if lanzamientos > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de lanzamientos debe ser menor a 100.',
+            'code': 1000
+            }), 400
+    
     if dados <= 0:
         return jsonify({
             'status': 400,
             'error': True,
             'message': 'La cantidad de dados debe ser mayor a 0.',
             'code': 1002
+            }), 400
+    
+    if dados > 10:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de dados debe ser menor a 10.',
+            'code': 1000
             }), 400
 
     lanzamientos_dict = {}
@@ -476,6 +516,14 @@ def DecisionAleatoria():
             'message': 'La cantidad de decisiones debe ser mayor a 0.',
             'code': 1001,
             }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de decisiones debe ser menor a 100.',
+            'code': 1000,
+            }), 400
 
     decisiones = ["Si", "No"]
     decisiones_dict = {}
@@ -530,6 +578,14 @@ def LetraAleatoria():
             'error': True,
             'message': 'La cantidad de letras debe ser mayor a 0.',
             'code': 1001
+            }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de letras debe ser menor a 100.',
+            'code': 1000
             }), 400
 
     letras = [chr(randint(65, 90)) for _ in range(cantidad)]
@@ -608,6 +664,14 @@ def CoordenadasAleatorias():
             'message': 'La cantidad de coordenadas debe ser mayor a 0.',
             'code': 1001,
             }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de coordenadas debe ser menor a 100.',
+            'code': 1000,
+            }), 400
 
     resultado = {}
     for i in range(1, cantidad + 1):
@@ -673,12 +737,28 @@ def BinarioAleatorio():
             'code': 1001
             }), 400
     
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad debe ser menor a 100.',
+            'code': 1000
+            }), 400
+    
     if longitud <= 0:
         return jsonify({
             'status': 400,
             'error': True,
             'message': 'La longitud debe ser mayor a 0.',
             'code': 1002
+            }), 400
+    
+    if longitud > 128:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La longitud debe ser menor a 128.',
+            'code': 1000
             }), 400
 
     binarios = [''.join(choices('01', k=longitud)) for _ in range(cantidad)]
@@ -755,6 +835,14 @@ def SeleccionAleatoria():
             'message': 'La cantidad debe ser mayor a 0.',
             'code': 1001
         }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad debe ser menor a 100.',
+            'code': 1000
+        }), 400
 
     if unicos:
         if cantidad > len(valores):
@@ -829,11 +917,19 @@ def ContraseñaAleatoria():
             'code': 1001
             }), 400
     
-    if longitud <= 0:
+    if cantidad > 100:
         return jsonify({
             'status': 400,
             'error': True,
-            'message': 'La longitud debe ser mayor a 0.',
+            'message': 'La cantidad debe ser menor a 100.',
+            'code': 1000
+            }), 400
+    
+    if longitud <= 0 or longitud > 128:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La longitud debe ser mayor a 0 y menor a 128.',
             'code': 1002
             }), 400
 
@@ -925,6 +1021,14 @@ def FechaAleatoria():
             'message': 'La cantidad debe ser mayor a 0.',
             'code': 1001
             }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad debe ser menor a 100.',
+            'code': 1000
+            }), 400
 
     if fecha_inicial > fecha_final:
         return jsonify({
@@ -1012,6 +1116,14 @@ def HoraAleatoria():
             'message': 'La cantidad debe ser mayor a 0.',
             'code': 1001
             }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad debe ser menor a 100.',
+            'code': 1000
+            }), 400
 
     if hora_inicial > hora_final:
         return jsonify({
@@ -1075,6 +1187,14 @@ def ColorAleatorio():
             'error': True,
             'message': 'La cantidad debe ser mayor a 0.',
             'code': 1001,
+            }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad debe ser menor a 100.',
+            'code': 1000,
             }), 400
 
     colores = {
