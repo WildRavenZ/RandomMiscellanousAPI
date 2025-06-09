@@ -159,14 +159,16 @@ def NumDecimalAleatorio():
     parameters:
       - name: lim_inferior
         in: query
-        type: integer
+        type: number
+        format: float
         required: false
-        default: 1
+        default: 1.0
       - name: lim_superior
         in: query
-        type: integer
+        type: number
+        format: float
         required: false
-        default: 100
+        default: 100.0
       - name: decimales
         in: query
         type: integer
@@ -217,7 +219,7 @@ def NumDecimalAleatorio():
             'code': 1001
         }), 400
 
-    numeros = [round(uniform(lim_inferior, lim_superior), decimales) for _ in range(cantidad)]
+    numeros = [f"{uniform(lim_inferior, lim_superior):.{decimales}f}" for _ in range(cantidad)]
 
     return jsonify({
         'status': 200,
