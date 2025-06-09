@@ -1,4 +1,4 @@
-# 🧪 RandomMiscellaneousAPI [1.0.3]
+# 🧪 RandomMiscellaneousAPI [1.1.0]
 
 ![Python](https://img.shields.io/badge/Python-3.11.9-blue?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.1.0-lightgrey?logo=flask)
@@ -46,7 +46,10 @@ Para información más detallada sobre el funcionamiento de los endpoints, consu
 Este proyecto está bajo la licencia [MIT](LICENSE).
 
 ## 📈 Estado del proyecto
-### 1.0.3 (Versión actual):
+### 1.1.0 (Versión actual):
+- Se implementaron ciertas limitaciones en los consumos de la API para no sobresaturar la memoria del servidor. Ahora, las cantidades de generaciones que se puede realizar por API son de un máximo de 100.
+- Otras variables de entrada en las APIs también fueron limitadas variadamente.
+### 1.0.3:
 - Se modificó la función de NumDecimalAleatorio para ser más útil.
 ### 1.0.2:
 - Se agregó flask-cors para un consumo de API más permisivo en sitios web https.
