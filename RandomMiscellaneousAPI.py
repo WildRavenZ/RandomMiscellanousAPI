@@ -273,7 +273,7 @@ def BarajaAleatoria():
       200:
         description: Una carta aleatoria generada
         examples:
-          application/json: {"cartas_por_mano":1,"error":false,"manos":[{"mano_1":["10♣"]}],
+          application/json: {"cartas_por_mano":1,"error":false,"manos":[{"mano_1":["10C"]}],
           "status":200,"total_cartas":1}
       400:
         description: No hay suficientes cartas en la baraja para repartir sin repetir.
@@ -293,10 +293,10 @@ def BarajaAleatoria():
             }), 400
 
     baraja = [
-        "A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠",
-        "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦",
-        "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣",
-        "A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥"
+        "AS", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "JS", "QS", "KS",
+        "AD", "2D", "3D", "4D", "5D", "6D", "7D", "8D", "9D", "10D", "JD", "QD", "KD",
+        "AC", "2C", "3C", "4C", "5C", "6C", "7C", "8C", "9C", "10C", "JC", "QC", "KC",
+        "AH", "2H", "3H", "4H", "5H", "6H", "7H", "8H", "9H", "10H", "JH", "QH", "KH"
     ]
 
     total_cartas = cartas_por_mano * manos
