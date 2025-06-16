@@ -814,7 +814,7 @@ def SeleccionAleatoria():
           application/json: {"code":1002,"error":true,
           "message":"Debes proporcionar una lista de valores separados por comas.","status":400}
     """
-    valores_str = request.args.get('valores')
+    valores = request.args.get('valores')
     cantidad = request.args.get('cantidad', 1, type=int)
     unicos = request.args.get('unicos', 1, type=int)
 
