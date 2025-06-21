@@ -1,8 +1,8 @@
 ### DOCUMENTACIÓN ###
 # Nombre: RandomMiscellaneousAPI.py
 # Autor: Fernando Franco Zago
-# Fecha: 09/06/2025
-# Versión: 1.1.0
+# Fecha: 21/06/2025
+# Versión: 1.2.0
 # Descripción: RandomMiscellaneousAPI es una API desarrollada con Flask que
 #    permite generar diversos datos aleatorios útiles para pruebas, simulaciones,
 #    juegos, educación o desarrollo de software. Entre sus funcionalidades se
@@ -12,8 +12,8 @@
 #    altamente configurable y está diseñada para ofrecer respuestas claras,
 #    estructuradas y listas para integrarse en sistemas frontend, scripts 
 #    automatizados o entornos de desarrollo.
-# Requisitos: pip install Flask, pip install flask-cors, pip install flasgger
-# Librerías: Flask, jsonify, request, CORS Swagger, randint, sample, uniform, choices, datetime, timedelta
+# Requisitos: pip install Flask, pip install flask-cors, pip install flasgger, pip install faker
+# Librerías: Flask, jsonify, request, CORS, Swagger, Faker, randint, sample, uniform, choices, choice, datetime, timedelta
 #####################
 
 ### LIBRERÍAS ###
@@ -21,8 +21,9 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flasgger import Swagger
+from faker import Faker
 # Nativas
-from random import randint, sample, uniform, choices
+from random import randint, sample, uniform, choices, choice
 from datetime import datetime, timedelta
 #################
 
@@ -35,7 +36,7 @@ swagger_config = {
     "info": {
         "title": "RandomMiscellaneousAPI",
         "description": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "contact": {
             "name": "Fernando Franco Zago"
         }
@@ -55,15 +56,16 @@ def home():
     documentacion = {
         "nombre": "RandomMiscellaneousAPI.py",
         "autor": "Fernando Franco Zago",
-        "fecha": "09/06/2025",
-        "version": "1.1.0",
+        "fecha": "21/06/2025",
+        "version": "1.2.0",
         "descripcion": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
-        "requisitos": ["pip install Flask", "pip install flask-cors", "pip install flasgger"],
+        "requisitos": ["pip install Flask", "pip install flask-cors", "pip install flasgger", "pip install faker"],
         "librerias": {
             "flask": ["Flask", "jsonify", "request"],
             "flask-cors": ["CORS"],
             "flasgger": ["Swagger"],
-            "random": ["randint", "sample", "uniform", "choices"],
+            "faker": ["Faker"],
+            "random": ["randint", "sample", "uniform", "choices", "choice"],
             "datetime": ["datetime", "timedelta"]
         }
     }
@@ -477,6 +479,64 @@ def LanzamientoDado():
     return jsonify(respuesta), 200
 
 ### API ###
+# Nombre: NombreAleatorio
+# Tipo: GET
+# Descripción: Genera nombres aleatorios utilizando la librería Faker.
+# Parámetros:
+#   - cantidad: Cantidad de nombres a generar (por defecto 1).
+# Respuesta: JSON con los nombres generados.
+###########
+@app.route('/api/NombreAleatorio', methods=['GET'])
+def NombreAleatorio():
+    """
+    Genera nombres aleatorios utilizando la librería Faker.
+    ---
+    parameters:
+      - name: cantidad
+        in: query
+        type: integer
+        required: false
+        default: 1
+    responses:
+      200:
+        description: Un nombre aleatorio generado
+        examples:
+          application/json: {"cantidad":1,"error":false,"nombres":["John Doe"],"status":200}
+      400:
+        description: Cantidad de nombres menor o igual a 0
+        examples:
+          application/json: {"code":1001,"error":true,
+          "message":"La cantidad de nombres debe ser mayor a 0.","status":400}
+    """
+    cantidad = request.args.get('cantidad', 1, type=int)
+
+    if cantidad <= 0:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de nombres debe ser mayor a 0.',
+            'code': 1001
+            }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de nombres debe ser menor a 100.',
+            'code': 1000
+            }), 400
+
+    fake = Faker('es_MX')
+    nombres = [fake.name() for _ in range(cantidad)]
+
+    return jsonify({
+        'status': 200,
+        'error': False,
+        'nombres': nombres,
+        'cantidad': cantidad
+        }), 200
+
+### API ###
 # Nombre: DecisionAleatoria
 # Tipo: GET
 # Descripción: Genera decisiones aleatorias entre Si y No.
@@ -598,6 +658,64 @@ def LetraAleatoria():
         }), 200
 
 ### API ###
+# Nombre: CaracterAleatorio
+# Tipo: GET
+# Descripción: Genera caracteres aleatorios del conjunto ASCII imprimible.
+# Parámetros:
+#   - cantidad: Cantidad de caracteres a generar (por defecto 1).
+# Respuesta: JSON con los caracteres generados.
+###########
+@app.route('/api/CaracterAleatorio', methods=['GET'])
+def CaracterAleatorio():
+    """
+    Genera caracteres aleatorios del conjunto ASCII imprimible.
+    ---
+    parameters:
+      - name: cantidad
+        in: query
+        type: integer
+        required: false
+        default: 1
+    responses:
+      200:
+        description: Un caracter aleatorio generado
+        examples:
+          application/json: {"cantidad":1,"error":false,"caracteres":["#"],"status":200}
+      400:
+        description: Cantidad de caracteres menor o igual a 0
+        examples:
+          application/json: {"code":1001,"error":true,
+          "message":"La cantidad de caracteres debe ser mayor a 0.","status":400}
+    """
+    cantidad = request.args.get('cantidad', 1, type=int)
+
+    if cantidad <= 0:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de caracteres debe ser mayor a 0.',
+            'code': 1001
+            }), 400
+    
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de caracteres debe ser menor a 100.',
+            'code': 1000
+            }), 400
+
+    caracteres_validos = [chr(i) for i in range(32, 255) if i != 127]
+    caracteres = [choice(caracteres_validos) for _ in range(cantidad)]
+
+    return jsonify({
+        'status': 200,
+        'error': False,
+        'caracteres': caracteres,
+        'cantidad': cantidad
+        }), 200
+
+### API ###
 # Nombre: PiedraPapelTijera
 # Tipo: GET
 # Descripción: Genera una decisión aleatoria entre piedra, papel o tijera.
@@ -622,6 +740,81 @@ def PiedraPapelTijera():
         'error': False,
         'decision': decision
         }), 200
+
+### API ###
+# Nombre: EmojiAleatorio
+# Tipo: GET
+# Descripción: Genera un emoji aleatorio.
+# Parámetros:
+#   - cantidad: Cantidad de emojis a generar (por defecto 1).
+# Respuesta: JSON con el emoji generado.
+###########
+from flask import Flask, request, jsonify
+from random import choice
+
+app = Flask(__name__)
+
+@app.route('/api/EmojiAleatorio', methods=['GET'])
+def EmojiAleatorio():
+    """
+    Genera uno o varios emojis aleatorios.
+    ---
+    parameters:
+      - name: cantidad
+        in: query
+        type: integer
+        required: false
+        default: 1
+    responses:
+      200:
+        description: Emojis aleatorios generados
+        examples:
+          application/json: {"cantidad":1,"error":false,"emojis":["😀"],"status":200}
+      400:
+        description: Cantidad inválida
+        examples:
+          application/json: {"code":1001,"error":true,"message":"La cantidad de emojis debe ser mayor a 0.","status":400}
+    """
+    cantidad = request.args.get('cantidad', 1, type=int)
+
+    if cantidad <= 0:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de emojis debe ser mayor a 0.',
+            'code': 1001
+        }), 400
+
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de emojis debe ser menor a 100.',
+            'code': 1000
+        }), 400
+
+    emoji_rangos = [
+        (0x1F600, 0x1F64F),  # Emoticons
+        (0x1F300, 0x1F5FF),  # Símbolos y pictogramas
+        (0x1F680, 0x1F6FF),  # Transporte y mapas
+        (0x1F1E6, 0x1F1FF),  # Banderas
+        (0x1F900, 0x1F9FF),  # Símbolos suplementarios
+        (0x1FA70, 0x1FAFF),  # Extensión de símbolos
+    ]
+
+    # Función interna para elegir un emoji válido
+    def emoji_aleatorio():
+        r = choice(emoji_rangos)
+        return chr(choice(range(r[0], r[1] + 1)))
+
+    emojis = [emoji_aleatorio() for _ in range(cantidad)]
+
+    return jsonify({
+        'status': 200,
+        'error': False,
+        'emojis': emojis,
+        'cantidad': cantidad
+    }), 200
 
 ### API ###
 # Nombre: CoordenadaAleatoria
@@ -688,6 +881,104 @@ def CoordenadasAleatorias():
         'coordenadas' : resultado,
         'cantidad' : cantidad
         }), 200
+
+### API ###
+# Nombre: PaisAleatorio
+# Tipo: GET
+# Descripción: Genera un país aleatorio de una lista predefinida.
+# Parámetros:
+#   - cantidad: Cantidad de países a generar (por defecto 1).
+# Respuesta: JSON con los países generados.
+###########
+from flask import Flask, request, jsonify
+from random import choices
+
+app = Flask(__name__)
+
+@app.route('/api/PaisAleatorio', methods=['GET'])
+def PaisAleatorio():
+    """
+    Genera uno o varios países aleatorios de una lista predefinida (con posibilidad de repetición).
+    ---
+    parameters:
+      - name: cantidad
+        in: query
+        type: integer
+        required: false
+        default: 1
+    responses:
+      200:
+        description: Países aleatorios generados
+        examples:
+          application/json: {"cantidad":3,"error":false,"paises":["México","Japón","México"],"status":200}
+      400:
+        description: Cantidad de países inválida
+        examples:
+          application/json: {"code":1001,"error":true,"message":"La cantidad de países debe ser mayor a 0.","status":400}
+    """
+    cantidad = request.args.get('cantidad', 1, type=int)
+
+    if cantidad <= 0:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de países debe ser mayor a 0.',
+            'code': 1001
+        }), 400
+
+    if cantidad > 100:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'La cantidad de países debe ser menor a 100.',
+            'code': 1000
+        }), 400
+
+    paises = [
+        # América
+        "Argentina", "Bahamas", "Barbados", "Belice", "Bolivia", "Brasil", "Canadá", "Chile", "Colombia", "Costa Rica",
+        "Cuba", "Dominica", "Ecuador", "El Salvador", "Estados Unidos", "Granada", "Guatemala", "Guyana", "Haití",
+        "Honduras", "Jamaica", "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "República Dominicana",
+        "San Cristóbal y Nieves", "Santa Lucía", "San Vicente y las Granadinas", "Surinam", "Trinidad y Tobago",
+        "Uruguay", "Venezuela",
+
+        # Europa
+        "Alemania", "Andorra", "Austria", "Bélgica", "Bosnia y Herzegovina", "Bulgaria", "Chipre", "Croacia",
+        "Dinamarca", "Eslovaquia", "Eslovenia", "España", "Estonia", "Finlandia", "Francia", "Grecia", "Hungría",
+        "Irlanda", "Islandia", "Italia", "Kosovo", "Letonia", "Liechtenstein", "Lituania", "Luxemburgo", "Malta",
+        "Moldavia", "Mónaco", "Montenegro", "Noruega", "Países Bajos", "Polonia", "Portugal", "Reino Unido",
+        "República Checa", "Rumania", "Rusia", "San Marino", "Serbia", "Suecia", "Suiza", "Ucrania", "Vaticano",
+
+        # Asia
+        "Afganistán", "Arabia Saudita", "Armenia", "Azerbaiyán", "Bangladés", "Baréin", "Birmania", "Brunéi", "Bután",
+        "Camboya", "Catar", "China", "Corea del Norte", "Corea del Sur", "Emiratos Árabes Unidos", "Filipinas",
+        "Georgia", "India", "Indonesia", "Irak", "Irán", "Israel", "Japón", "Jordania", "Kazajistán", "Kirguistán",
+        "Kuwait", "Laos", "Líbano", "Malasia", "Maldivas", "Mongolia", "Nepal", "Omán", "Pakistán", "Singapur",
+        "Siria", "Sri Lanka", "Tayikistán", "Tailandia", "Timor Oriental", "Turkmenistán", "Turquía", "Uzbekistán",
+        "Vietnam", "Yemen",
+
+        # África
+        "Angola", "Argelia", "Benín", "Botsuana", "Burkina Faso", "Burundi", "Cabo Verde", "Camerún", "Chad",
+        "Comoras", "Congo", "Costa de Marfil", "Egipto", "Eritrea", "Esuatini", "Etiopía", "Gabón", "Gambia",
+        "Ghana", "Guinea", "Guinea-Bisáu", "Guinea Ecuatorial", "Kenia", "Lesoto", "Liberia", "Libia", "Madagascar",
+        "Malaui", "Malí", "Marruecos", "Mauricio", "Mauritania", "Mozambique", "Namibia", "Níger", "Nigeria",
+        "República Centroafricana", "República Democrática del Congo", "Ruanda", "Santo Tomé y Príncipe",
+        "Senegal", "Seychelles", "Sierra Leona", "Somalia", "Sudáfrica", "Sudán", "Sudán del Sur", "Tanzania",
+        "Togo", "Túnez", "Uganda", "Yibuti", "Zambia", "Zimbabue",
+
+        # Oceanía
+        "Australia", "Fiyi", "Islas Marshall", "Islas Salomón", "Kiribati", "Micronesia", "Nauru", "Nueva Zelanda",
+        "Palaos", "Papúa Nueva Guinea", "Samoa", "Tonga", "Tuvalu", "Vanuatu"
+    ]
+
+    seleccionados = choices(paises, k=cantidad)
+
+    return jsonify({
+        'status': 200,
+        'error': False,
+        'paises': seleccionados,
+        'cantidad': cantidad
+    }), 200
 
 ### API ###
 # Nombre: BinarioAleatorio
