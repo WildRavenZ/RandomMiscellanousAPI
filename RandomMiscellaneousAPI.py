@@ -885,11 +885,6 @@ def CoordenadasAleatorias():
 #   - cantidad: Cantidad de países a generar (por defecto 1).
 # Respuesta: JSON con los países generados.
 ###########
-from flask import Flask, request, jsonify
-from random import choices
-
-app = Flask(__name__)
-
 @app.route('/api/PaisAleatorio', methods=['GET'])
 def PaisAleatorio():
     """
