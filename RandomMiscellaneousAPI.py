@@ -749,11 +749,6 @@ def PiedraPapelTijera():
 #   - cantidad: Cantidad de emojis a generar (por defecto 1).
 # Respuesta: JSON con el emoji generado.
 ###########
-from flask import Flask, request, jsonify
-from random import choice
-
-app = Flask(__name__)
-
 @app.route('/api/EmojiAleatorio', methods=['GET'])
 def EmojiAleatorio():
     """
