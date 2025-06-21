@@ -888,7 +888,7 @@ def CoordenadasAleatorias():
 @app.route('/api/PaisAleatorio', methods=['GET'])
 def PaisAleatorio():
     """
-    Genera uno o varios países aleatorios de una lista predefinida (con posibilidad de repetición).
+    Genera uno o varios países aleatorios de una lista predefinida con sus códigos ISO 3166-1 alfa-2.
     ---
     parameters:
       - name: cantidad
@@ -900,11 +900,15 @@ def PaisAleatorio():
       200:
         description: Países aleatorios generados
         examples:
-          application/json: {"cantidad":3,"error":false,"paises":["México","Japón","México"],"status":200}
-      400:
-        description: Cantidad de países inválida
-        examples:
-          application/json: {"code":1001,"error":true,"message":"La cantidad de países debe ser mayor a 0.","status":400}
+          application/json: {
+              "cantidad": 2,
+              "error": false,
+              "paises": [
+                  {"nombre": "México", "codigo": "MX"},
+                  {"nombre": "Japón", "codigo": "JP"}
+              ],
+              "status": 200
+          }
     """
     cantidad = request.args.get('cantidad', 1, type=int)
 
@@ -924,49 +928,64 @@ def PaisAleatorio():
             'code': 1000
         }), 400
 
-    paises = [
+    paises_con_codigo = {
         # América
-        "Argentina", "Bahamas", "Barbados", "Belice", "Bolivia", "Brasil", "Canadá", "Chile", "Colombia", "Costa Rica",
-        "Cuba", "Dominica", "Ecuador", "El Salvador", "Estados Unidos", "Granada", "Guatemala", "Guyana", "Haití",
-        "Honduras", "Jamaica", "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "República Dominicana",
-        "San Cristóbal y Nieves", "Santa Lucía", "San Vicente y las Granadinas", "Surinam", "Trinidad y Tobago",
-        "Uruguay", "Venezuela",
+        "Argentina": "AR", "Bahamas": "BS", "Barbados": "BB", "Belice": "BZ", "Bolivia": "BO", "Brasil": "BR",
+        "Canadá": "CA", "Chile": "CL", "Colombia": "CO", "Costa Rica": "CR", "Cuba": "CU", "Dominica": "DM",
+        "Ecuador": "EC", "El Salvador": "SV", "Estados Unidos": "US", "Granada": "GD", "Guatemala": "GT",
+        "Guyana": "GY", "Haití": "HT", "Honduras": "HN", "Jamaica": "JM", "México": "MX", "Nicaragua": "NI",
+        "Panamá": "PA", "Paraguay": "PY", "Perú": "PE", "República Dominicana": "DO",
+        "San Cristóbal y Nieves": "KN", "Santa Lucía": "LC", "San Vicente y las Granadinas": "VC",
+        "Surinam": "SR", "Trinidad y Tobago": "TT", "Uruguay": "UY", "Venezuela": "VE",
 
         # Europa
-        "Alemania", "Andorra", "Austria", "Bélgica", "Bosnia y Herzegovina", "Bulgaria", "Chipre", "Croacia",
-        "Dinamarca", "Eslovaquia", "Eslovenia", "España", "Estonia", "Finlandia", "Francia", "Grecia", "Hungría",
-        "Irlanda", "Islandia", "Italia", "Kosovo", "Letonia", "Liechtenstein", "Lituania", "Luxemburgo", "Malta",
-        "Moldavia", "Mónaco", "Montenegro", "Noruega", "Países Bajos", "Polonia", "Portugal", "Reino Unido",
-        "República Checa", "Rumania", "Rusia", "San Marino", "Serbia", "Suecia", "Suiza", "Ucrania", "Vaticano",
+        "Alemania": "DE", "Andorra": "AD", "Austria": "AT", "Bélgica": "BE", "Bosnia y Herzegovina": "BA",
+        "Bulgaria": "BG", "Chipre": "CY", "Croacia": "HR", "Dinamarca": "DK", "Eslovaquia": "SK",
+        "Eslovenia": "SI", "España": "ES", "Estonia": "EE", "Finlandia": "FI", "Francia": "FR", "Grecia": "GR",
+        "Hungría": "HU", "Irlanda": "IE", "Islandia": "IS", "Italia": "IT", "Kosovo": "XK", "Letonia": "LV",
+        "Liechtenstein": "LI", "Lituania": "LT", "Luxemburgo": "LU", "Malta": "MT", "Moldavia": "MD",
+        "Mónaco": "MC", "Montenegro": "ME", "Noruega": "NO", "Países Bajos": "NL", "Polonia": "PL",
+        "Portugal": "PT", "Reino Unido": "GB", "República Checa": "CZ", "Rumania": "RO", "Rusia": "RU",
+        "San Marino": "SM", "Serbia": "RS", "Suecia": "SE", "Suiza": "CH", "Ucrania": "UA", "Vaticano": "VA",
 
         # Asia
-        "Afganistán", "Arabia Saudita", "Armenia", "Azerbaiyán", "Bangladés", "Baréin", "Birmania", "Brunéi", "Bután",
-        "Camboya", "Catar", "China", "Corea del Norte", "Corea del Sur", "Emiratos Árabes Unidos", "Filipinas",
-        "Georgia", "India", "Indonesia", "Irak", "Irán", "Israel", "Japón", "Jordania", "Kazajistán", "Kirguistán",
-        "Kuwait", "Laos", "Líbano", "Malasia", "Maldivas", "Mongolia", "Nepal", "Omán", "Pakistán", "Singapur",
-        "Siria", "Sri Lanka", "Tayikistán", "Tailandia", "Timor Oriental", "Turkmenistán", "Turquía", "Uzbekistán",
-        "Vietnam", "Yemen",
+        "Afganistán": "AF", "Arabia Saudita": "SA", "Armenia": "AM", "Azerbaiyán": "AZ", "Bangladés": "BD",
+        "Baréin": "BH", "Birmania": "MM", "Brunéi": "BN", "Bután": "BT", "Camboya": "KH", "Catar": "QA",
+        "China": "CN", "Corea del Norte": "KP", "Corea del Sur": "KR", "Emiratos Árabes Unidos": "AE",
+        "Filipinas": "PH", "Georgia": "GE", "India": "IN", "Indonesia": "ID", "Irak": "IQ", "Irán": "IR",
+        "Israel": "IL", "Japón": "JP", "Jordania": "JO", "Kazajistán": "KZ", "Kirguistán": "KG", "Kuwait": "KW",
+        "Laos": "LA", "Líbano": "LB", "Malasia": "MY", "Maldivas": "MV", "Mongolia": "MN", "Nepal": "NP",
+        "Omán": "OM", "Pakistán": "PK", "Singapur": "SG", "Siria": "SY", "Sri Lanka": "LK", "Tayikistán": "TJ",
+        "Tailandia": "TH", "Timor Oriental": "TL", "Turkmenistán": "TM", "Turquía": "TR", "Uzbekistán": "UZ",
+        "Vietnam": "VN", "Yemen": "YE",
 
         # África
-        "Angola", "Argelia", "Benín", "Botsuana", "Burkina Faso", "Burundi", "Cabo Verde", "Camerún", "Chad",
-        "Comoras", "Congo", "Costa de Marfil", "Egipto", "Eritrea", "Esuatini", "Etiopía", "Gabón", "Gambia",
-        "Ghana", "Guinea", "Guinea-Bisáu", "Guinea Ecuatorial", "Kenia", "Lesoto", "Liberia", "Libia", "Madagascar",
-        "Malaui", "Malí", "Marruecos", "Mauricio", "Mauritania", "Mozambique", "Namibia", "Níger", "Nigeria",
-        "República Centroafricana", "República Democrática del Congo", "Ruanda", "Santo Tomé y Príncipe",
-        "Senegal", "Seychelles", "Sierra Leona", "Somalia", "Sudáfrica", "Sudán", "Sudán del Sur", "Tanzania",
-        "Togo", "Túnez", "Uganda", "Yibuti", "Zambia", "Zimbabue",
+        "Angola": "AO", "Argelia": "DZ", "Benín": "BJ", "Botsuana": "BW", "Burkina Faso": "BF", "Burundi": "BI",
+        "Cabo Verde": "CV", "Camerún": "CM", "Chad": "TD", "Comoras": "KM", "Congo": "CG",
+        "Costa de Marfil": "CI", "Egipto": "EG", "Eritrea": "ER", "Esuatini": "SZ", "Etiopía": "ET",
+        "Gabón": "GA", "Gambia": "GM", "Ghana": "GH", "Guinea": "GN", "Guinea-Bisáu": "GW",
+        "Guinea Ecuatorial": "GQ", "Kenia": "KE", "Lesoto": "LS", "Liberia": "LR", "Libia": "LY",
+        "Madagascar": "MG", "Malaui": "MW", "Malí": "ML", "Marruecos": "MA", "Mauricio": "MU",
+        "Mauritania": "MR", "Mozambique": "MZ", "Namibia": "NA", "Níger": "NE", "Nigeria": "NG",
+        "República Centroafricana": "CF", "República Democrática del Congo": "CD", "Ruanda": "RW",
+        "Santo Tomé y Príncipe": "ST", "Senegal": "SN", "Seychelles": "SC", "Sierra Leona": "SL",
+        "Somalia": "SO", "Sudáfrica": "ZA", "Sudán": "SD", "Sudán del Sur": "SS", "Tanzania": "TZ",
+        "Togo": "TG", "Túnez": "TN", "Uganda": "UG", "Yibuti": "DJ", "Zambia": "ZM", "Zimbabue": "ZW",
 
         # Oceanía
-        "Australia", "Fiyi", "Islas Marshall", "Islas Salomón", "Kiribati", "Micronesia", "Nauru", "Nueva Zelanda",
-        "Palaos", "Papúa Nueva Guinea", "Samoa", "Tonga", "Tuvalu", "Vanuatu"
-    ]
+        "Australia": "AU", "Fiyi": "FJ", "Islas Marshall": "MH", "Islas Salomón": "SB", "Kiribati": "KI",
+        "Micronesia": "FM", "Nauru": "NR", "Nueva Zelanda": "NZ", "Palaos": "PW", "Papúa Nueva Guinea": "PG",
+        "Samoa": "WS", "Tonga": "TO", "Tuvalu": "TV", "Vanuatu": "VU"
+    }
 
-    seleccionados = choices(paises, k=cantidad)
+    seleccionados = choices(list(paises_con_codigo.items()), k=cantidad)
+
+    paises_resultado = [{'nombre': nombre, 'codigo': codigo} for nombre, codigo in seleccionados]
 
     return jsonify({
         'status': 200,
         'error': False,
-        'paises': seleccionados,
+        'paises': paises_resultado,
         'cantidad': cantidad
     }), 200
 
