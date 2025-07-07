@@ -1,8 +1,8 @@
 ### DOCUMENTACIÓN ###
 # Nombre: RandomMiscellaneousAPI.py
 # Autor: Fernando Franco Zago
-# Fecha: 21/06/2025
-# Versión: 1.2.0
+# Fecha: 07/07/2025
+# Versión: 1.2.1
 # Descripción: RandomMiscellaneousAPI es una API desarrollada con Flask que
 #    permite generar diversos datos aleatorios útiles para pruebas, simulaciones,
 #    juegos, educación o desarrollo de software. Entre sus funcionalidades se
@@ -36,7 +36,7 @@ swagger_config = {
     "info": {
         "title": "RandomMiscellaneousAPI",
         "description": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "contact": {
             "name": "Fernando Franco Zago"
         }
