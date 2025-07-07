@@ -1,4 +1,4 @@
-# 🧪 RandomMiscellaneousAPI [1.2.0]
+# 🧪 RandomMiscellaneousAPI [1.2.1]
 
 ![Python](https://img.shields.io/badge/Python-3.11.9-blue?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.1.0-lightgrey?logo=flask)
@@ -61,7 +61,11 @@ Para información más detallada sobre el funcionamiento de los endpoints, consu
 Este proyecto está bajo la licencia [MIT](LICENSE).
 
 ## 📈 Estado del proyecto
-### 1.2.0 (Versión actual):
+### 1.2.1 (Versión actual):
+- La API de `HoraAleatoria` puede devolver los resultados en formatos de 24 o 12 horas si se usa el argumento: `formato=12h`.
+- La API de `PaisAleatorio` ahora devuelve el continente de cada país y funciona haciendo filtro de dicho continente. Por ejemplo, al agregar el argumento: `continente=asia,europa` realizará la selección aleatoria de esos continentes. Si se deja vacío, funcionará de manera normal.
+- Cambios en la documentación y el README.
+### 1.2.0:
 - Se agregaron 4 nuevas funciones: `NombreAleatorio`, `PaisAleatorio`, `CaracterAleatorio` y `EmojiAleatorio`.
 - Se arreglaron errores varios en el manejo de las sulicitudes.
 - La API usa la librería `faker` para generación de nombres.
@@ -83,4 +87,4 @@ Este proyecto está bajo la licencia [MIT](LICENSE).
 ## 🙋‍♂️ Autores y contribuidores
 - Fernando Franco Zago (Autor) [Github](https://github.com/WildRavenZ) y [LinkedIn](https://www.linkedin.com/in/fernando-franco-zago-066840313/).
 
-#### *Actualizado al 23/06/2025*
+#### *Actualizado al 07/07/2025*
