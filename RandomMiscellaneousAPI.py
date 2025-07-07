@@ -888,7 +888,7 @@ def CoordenadasAleatorias():
 @app.route('/api/PaisAleatorio', methods=['GET'])
 def PaisAleatorio():
     """
-    Genera uno o varios países aleatorios de una lista predefinida con sus códigos ISO 3166-1 alfa-2.
+    Genera uno o varios países aleatorios, con opción de filtrar por continentes.
     ---
     parameters:
       - name: cantidad
@@ -896,21 +896,19 @@ def PaisAleatorio():
         type: integer
         required: false
         default: 1
+      - name: continente
+        in: query
+        type: string
+        required: false
+        description: Puede ser uno o varios separados por coma. Ej: america,europa
     responses:
       200:
         description: Países aleatorios generados
-        examples:
-          application/json: {
-              "cantidad": 2,
-              "error": false,
-              "paises": [
-                  {"nombre": "México", "codigo": "MX"},
-                  {"nombre": "Japón", "codigo": "JP"}
-              ],
-              "status": 200
-          }
+      400:
+        description: Petición inválida
     """
     cantidad = request.args.get('cantidad', 1, type=int)
+    continente_str = request.args.get('continente', '').lower()
 
     if cantidad <= 0:
         return jsonify({
@@ -928,65 +926,68 @@ def PaisAleatorio():
             'code': 1000
         }), 400
 
-    paises_con_codigo = {
-        # América
-        "Argentina": "AR", "Bahamas": "BS", "Barbados": "BB", "Belice": "BZ", "Bolivia": "BO", "Brasil": "BR",
-        "Canadá": "CA", "Chile": "CL", "Colombia": "CO", "Costa Rica": "CR", "Cuba": "CU", "Dominica": "DM",
-        "Ecuador": "EC", "El Salvador": "SV", "Estados Unidos": "US", "Granada": "GD", "Guatemala": "GT",
-        "Guyana": "GY", "Haití": "HT", "Honduras": "HN", "Jamaica": "JM", "México": "MX", "Nicaragua": "NI",
-        "Panamá": "PA", "Paraguay": "PY", "Perú": "PE", "República Dominicana": "DO",
-        "San Cristóbal y Nieves": "KN", "Santa Lucía": "LC", "San Vicente y las Granadinas": "VC",
-        "Surinam": "SR", "Trinidad y Tobago": "TT", "Uruguay": "UY", "Venezuela": "VE",
-
-        # Europa
-        "Alemania": "DE", "Andorra": "AD", "Austria": "AT", "Bélgica": "BE", "Bosnia y Herzegovina": "BA",
-        "Bulgaria": "BG", "Chipre": "CY", "Croacia": "HR", "Dinamarca": "DK", "Eslovaquia": "SK",
-        "Eslovenia": "SI", "España": "ES", "Estonia": "EE", "Finlandia": "FI", "Francia": "FR", "Grecia": "GR",
-        "Hungría": "HU", "Irlanda": "IE", "Islandia": "IS", "Italia": "IT", "Kosovo": "XK", "Letonia": "LV",
-        "Liechtenstein": "LI", "Lituania": "LT", "Luxemburgo": "LU", "Malta": "MT", "Moldavia": "MD",
-        "Mónaco": "MC", "Montenegro": "ME", "Noruega": "NO", "Países Bajos": "NL", "Polonia": "PL",
-        "Portugal": "PT", "Reino Unido": "GB", "República Checa": "CZ", "Rumania": "RO", "Rusia": "RU",
-        "San Marino": "SM", "Serbia": "RS", "Suecia": "SE", "Suiza": "CH", "Ucrania": "UA", "Vaticano": "VA",
-
-        # Asia
-        "Afganistán": "AF", "Arabia Saudita": "SA", "Armenia": "AM", "Azerbaiyán": "AZ", "Bangladés": "BD",
-        "Baréin": "BH", "Birmania": "MM", "Brunéi": "BN", "Bután": "BT", "Camboya": "KH", "Catar": "QA",
-        "China": "CN", "Corea del Norte": "KP", "Corea del Sur": "KR", "Emiratos Árabes Unidos": "AE",
-        "Filipinas": "PH", "Georgia": "GE", "India": "IN", "Indonesia": "ID", "Irak": "IQ", "Irán": "IR",
-        "Israel": "IL", "Japón": "JP", "Jordania": "JO", "Kazajistán": "KZ", "Kirguistán": "KG", "Kuwait": "KW",
-        "Laos": "LA", "Líbano": "LB", "Malasia": "MY", "Maldivas": "MV", "Mongolia": "MN", "Nepal": "NP",
-        "Omán": "OM", "Pakistán": "PK", "Singapur": "SG", "Siria": "SY", "Sri Lanka": "LK", "Tayikistán": "TJ",
-        "Tailandia": "TH", "Timor Oriental": "TL", "Turkmenistán": "TM", "Turquía": "TR", "Uzbekistán": "UZ",
-        "Vietnam": "VN", "Yemen": "YE",
-
-        # África
-        "Angola": "AO", "Argelia": "DZ", "Benín": "BJ", "Botsuana": "BW", "Burkina Faso": "BF", "Burundi": "BI",
-        "Cabo Verde": "CV", "Camerún": "CM", "Chad": "TD", "Comoras": "KM", "Congo": "CG",
-        "Costa de Marfil": "CI", "Egipto": "EG", "Eritrea": "ER", "Esuatini": "SZ", "Etiopía": "ET",
-        "Gabón": "GA", "Gambia": "GM", "Ghana": "GH", "Guinea": "GN", "Guinea-Bisáu": "GW",
-        "Guinea Ecuatorial": "GQ", "Kenia": "KE", "Lesoto": "LS", "Liberia": "LR", "Libia": "LY",
-        "Madagascar": "MG", "Malaui": "MW", "Malí": "ML", "Marruecos": "MA", "Mauricio": "MU",
-        "Mauritania": "MR", "Mozambique": "MZ", "Namibia": "NA", "Níger": "NE", "Nigeria": "NG",
-        "República Centroafricana": "CF", "República Democrática del Congo": "CD", "Ruanda": "RW",
-        "Santo Tomé y Príncipe": "ST", "Senegal": "SN", "Seychelles": "SC", "Sierra Leona": "SL",
-        "Somalia": "SO", "Sudáfrica": "ZA", "Sudán": "SD", "Sudán del Sur": "SS", "Tanzania": "TZ",
-        "Togo": "TG", "Túnez": "TN", "Uganda": "UG", "Yibuti": "DJ", "Zambia": "ZM", "Zimbabue": "ZW",
-
-        # Oceanía
-        "Australia": "AU", "Fiyi": "FJ", "Islas Marshall": "MH", "Islas Salomón": "SB", "Kiribati": "KI",
-        "Micronesia": "FM", "Nauru": "NR", "Nueva Zelanda": "NZ", "Palaos": "PW", "Papúa Nueva Guinea": "PG",
-        "Samoa": "WS", "Tonga": "TO", "Tuvalu": "TV", "Vanuatu": "VU"
+    paises_por_continente = {
+        'america': ["Argentina", "Bahamas", "Barbados", "Belice", "Bolivia", "Brasil", "Canadá", "Chile", "Colombia", "Costa Rica",
+            "Cuba", "Dominica", "Ecuador", "El Salvador", "Estados Unidos", "Granada", "Guatemala", "Guyana", "Haití",
+            "Honduras", "Jamaica", "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "República Dominicana",
+            "San Cristóbal y Nieves", "Santa Lucía", "San Vicente y las Granadinas", "Surinam", "Trinidad y Tobago",
+            "Uruguay", "Venezuela"],
+        'europa': ["Alemania", "Andorra", "Austria", "Bélgica", "Bosnia y Herzegovina", "Bulgaria", "Chipre", "Croacia",
+            "Dinamarca", "Eslovaquia", "Eslovenia", "España", "Estonia", "Finlandia", "Francia", "Grecia", "Hungría",
+            "Irlanda", "Islandia", "Italia", "Kosovo", "Letonia", "Liechtenstein", "Lituania", "Luxemburgo", "Malta",
+            "Moldavia", "Mónaco", "Montenegro", "Noruega", "Países Bajos", "Polonia", "Portugal", "Reino Unido",
+            "República Checa", "Rumania", "Rusia", "San Marino", "Serbia", "Suecia", "Suiza", "Ucrania", "Vaticano"],
+        'asia': ["Afganistán", "Arabia Saudita", "Armenia", "Azerbaiyán", "Bangladés", "Baréin", "Birmania", "Brunéi", "Bután",
+            "Camboya", "Catar", "China", "Corea del Norte", "Corea del Sur", "Emiratos Árabes Unidos", "Filipinas",
+            "Georgia", "India", "Indonesia", "Irak", "Irán", "Israel", "Japón", "Jordania", "Kazajistán", "Kirguistán",
+            "Kuwait", "Laos", "Líbano", "Malasia", "Maldivas", "Mongolia", "Nepal", "Omán", "Pakistán", "Singapur",
+            "Siria", "Sri Lanka", "Tayikistán", "Tailandia", "Timor Oriental", "Turkmenistán", "Turquía", "Uzbekistán",
+            "Vietnam", "Yemen"],
+        'africa': ["Angola", "Argelia", "Benín", "Botsuana", "Burkina Faso", "Burundi", "Cabo Verde", "Camerún", "Chad",
+            "Comoras", "Congo", "Costa de Marfil", "Egipto", "Eritrea", "Esuatini", "Etiopía", "Gabón", "Gambia",
+            "Ghana", "Guinea", "Guinea-Bisáu", "Guinea Ecuatorial", "Kenia", "Lesoto", "Liberia", "Libia", "Madagascar",
+            "Malaui", "Malí", "Marruecos", "Mauricio", "Mauritania", "Mozambique", "Namibia", "Níger", "Nigeria",
+            "República Centroafricana", "República Democrática del Congo", "Ruanda", "Santo Tomé y Príncipe",
+            "Senegal", "Seychelles", "Sierra Leona", "Somalia", "Sudáfrica", "Sudán", "Sudán del Sur", "Tanzania",
+            "Togo", "Túnez", "Uganda", "Yibuti", "Zambia", "Zimbabue"],
+        'oceania': ["Australia", "Fiyi", "Islas Marshall", "Islas Salomón", "Kiribati", "Micronesia", "Nauru", "Nueva Zelanda",
+            "Palaos", "Papúa Nueva Guinea", "Samoa", "Tonga", "Tuvalu", "Vanuatu"]
     }
 
-    seleccionados = choices(list(paises_con_codigo.items()), k=cantidad)
+    pais_a_continente = {
+        pais: continente
+        for continente, paises in paises_por_continente.items()
+        for pais in paises
+    }
 
-    paises_resultado = [{'nombre': nombre, 'codigo': codigo} for nombre, codigo in seleccionados]
+    if continente_str:
+        continentes = [c.strip() for c in continente_str.split(',')]
+        continentes_invalidos = [c for c in continentes if c not in paises_por_continente]
+
+        if continentes_invalidos:
+            return jsonify({
+                'status': 400,
+                'error': True,
+                'message': f"Continente(s) no válido(s): {', '.join(continentes_invalidos)}. Usa america, europa, asia, africa, oceania.",
+                'code': 1002
+            }), 400
+
+        paises_filtrados = sum((paises_por_continente[c] for c in continentes), [])
+    else:
+        paises_filtrados = list(pais_a_continente.keys())
+
+    seleccionados = choices(paises_filtrados, k=cantidad)
+
+    resultado = [
+        {"pais": pais, "continente": pais_a_continente[pais]}
+        for pais in seleccionados
+    ]
 
     return jsonify({
         'status': 200,
         'error': False,
-        'paises': paises_resultado,
-        'cantidad': cantidad
+        'cantidad': cantidad,
+        'paises': resultado
     }), 200
 
 ### API ###
@@ -1377,6 +1378,12 @@ def HoraAleatoria():
         type: string
         required: false
         default: '23:59:59'
+      - name: formato
+        in: query
+        type: string
+        required: false
+        default: '24h'
+        enum: ['24h', '12h']
       - name: cantidad
         in: query
         type: integer
@@ -1396,6 +1403,7 @@ def HoraAleatoria():
     """
     hora_inicial_str = request.args.get('hora_inicial', '00:00:00')
     hora_final_str = request.args.get('hora_final', '23:59:59')
+    formato = request.args.get('formato', '24h').lower()
     cantidad = request.args.get('cantidad', 1, type=int)
 
     try:
@@ -1407,7 +1415,7 @@ def HoraAleatoria():
             'error': True,
             'message': 'Formato de hora inválido. Usa HH:MM:SS.',
             'code': 1003
-            }), 400
+        }), 400
 
     if cantidad <= 0:
         return jsonify({
@@ -1415,15 +1423,15 @@ def HoraAleatoria():
             'error': True,
             'message': 'La cantidad debe ser mayor a 0.',
             'code': 1001
-            }), 400
-    
+        }), 400
+
     if cantidad > 100:
         return jsonify({
             'status': 400,
             'error': True,
             'message': 'La cantidad debe ser menor a 100.',
             'code': 1000
-            }), 400
+        }), 400
 
     if hora_inicial > hora_final:
         return jsonify({
@@ -1431,13 +1439,29 @@ def HoraAleatoria():
             'error': True,
             'message': 'La hora inicial no puede ser posterior a la hora final.',
             'code': 1002
-            }), 400
+        }), 400
+
+    if formato not in ['24h', '12h']:
+        return jsonify({
+            'status': 400,
+            'error': True,
+            'message': 'Formato no válido. Usa "12h" o "24h".',
+            'code': 1004
+        }), 400
+
+    formato_strftime = '%I:%M:%S %p' if formato == '12h' else '%H:%M:%S'
 
     horas_aleatorias = {
-        f"hora_{i+1}": (datetime.combine(datetime.today(), hora_inicial) +
-                        timedelta(seconds=randint(0, (datetime.combine(datetime.today(), hora_final) - 
-                        datetime.combine(datetime.today(), hora_inicial)).seconds))).time()
-                        .strftime('%H:%M:%S')
+        f"hora_{i+1}": (
+            datetime.combine(datetime.today(), hora_inicial) +
+            timedelta(seconds=randint(0, (datetime.combine(datetime.today(), hora_final) -
+                                          datetime.combine(datetime.today(), hora_inicial)).seconds))
+        ).strftime(formato_strftime) if formato == '12h' else
+        (
+            datetime.combine(datetime.today(), hora_inicial) +
+            timedelta(seconds=randint(0, (datetime.combine(datetime.today(), hora_final) -
+                                          datetime.combine(datetime.today(), hora_inicial)).seconds))
+        ).strftime(formato_strftime)
         for i in range(cantidad)
     }
 
