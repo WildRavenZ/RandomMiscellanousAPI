@@ -56,8 +56,8 @@ def home():
     documentacion = {
         "nombre": "RandomMiscellaneousAPI.py",
         "autor": "Fernando Franco Zago",
-        "fecha": "21/06/2025",
-        "version": "1.2.0",
+        "fecha": "19/07/2025",
+        "version": "1.2.2",
         "descripcion": "RandomMiscellaneousAPI es una API desarrollada con Flask que permite generar diversos datos aleatorios útiles para pruebas, simulaciones, juegos, educación o desarrollo de software. Entre sus funcionalidades se incluyen la generación de números aleatorios, lanzamientos de moneda, selección aleatoria de elementos desde listas, coordenadas geográficas, fechas, contraseñas seguras, colores en formato hexadecimal y mucho más. La API es altamente configurable y está diseñada para ofrecer respuestas claras, estructuradas y listas para integrarse en sistemas frontend, scripts automatizados o entornos de desarrollo.",
         "requisitos": ["pip install Flask", "pip install flask-cors", "pip install flasgger", "pip install faker"],
         "librerias": {
